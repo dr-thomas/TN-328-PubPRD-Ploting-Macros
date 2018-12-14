@@ -6,22 +6,33 @@
 #include <TCanvas.h>
 #include <TLegend.h>
 
-void DrawTunedOverlays(){
+TCanvas* DrawTunedOverlays(bool isSignal, bool isWater){
 
-  //string CutStr1 = "(accum_level>4 && PIDnShowers<1 && nMuLike[0]==1";
-  string CutStr1 = "(accum_level>4 && PIDnShowers<1 && nMuLike[0]==2";
+  string CutStr1;
+  if(isSignal) {
+	  CutStr1 = "(accum_level>4 && PIDnShowers<1 && nMuLike[0]==1";
+  } else {
+	  CutStr1 = "(accum_level>4 && PIDnShowers<1 && nMuLike[0]==2";
+  }
 
-/*
-  TFile* inFmc = new TFile("RootFiles/BSTunedFullRun5WaterIn.root", "OPEN");
-  TFile* inFdata = new TFile("RootFiles/FullWaterInData.root", "OPEN");
-  float PoTMC=208.;
-  float PoTData=28.7;
-*/
+  TFile* inFmc;
+  TFile* inFdata;
+  float PoTMC;
+  float PoTData;
+  if(isWater){
+	  inFmc = new TFile("/Volumes/ThomasDrive/p0dCCAnalysis/Selection/DataMCOverlays/RootFiles/BSTunedFullRun5WaterIn.root", "OPEN");
+	  inFdata = new TFile("/Volumes/ThomasDrive/p0dCCAnalysis/Selection/DataMCOverlays/RootFiles/FullWaterInData.root", "OPEN");
+	  PoTMC=208.;
+	  PoTData=28.7;
 
-  TFile* inFmc = new TFile("/Volumes/ThomasDrive/p0dCCAnalysis/Selection/DataMCOverlays/RootFiles/BSTunedFullRun6Air.root", "OPEN");
-  TFile* inFdata = new TFile("/Volumes/ThomasDrive/p0dCCAnalysis/Selection/DataMCOverlays/RootFiles/FullRun6AirData.root", "OPEN");
-  float PoTMC=209.;
-  float PoTData=32.4;
+  } else {
+	  inFmc = new TFile("/Volumes/ThomasDrive/p0dCCAnalysis/Selection/DataMCOverlays/RootFiles/BSTunedFullRun6Air.root", "OPEN");
+	  inFdata = new TFile("/Volumes/ThomasDrive/p0dCCAnalysis/Selection/DataMCOverlays/RootFiles/FullRun6AirData.root", "OPEN");
+	  PoTMC=209.;
+	  PoTData=32.4;
+
+  }
+
 
 
 
@@ -44,15 +55,15 @@ void DrawTunedOverlays(){
   double PBins[9]={0,400,530,670,800,1000,1380,2010,3410};
   TString PBinsStr[9]={"0","400","530","670","800","1000","1380","2010","3410"};
   double CosBins[9][4]={
-    {1,1,1,1},//only one bin here
-    {0.84,0.94,1,1},//only three bins here
-    {0.85,0.92,0.96,1},//Col. Forbins...
-    {0.88,0.93,0.97,1},
-    {0.90,0.94,0.97,1},
-    {0.91,0.95,0.97,1},
-    {0.92,0.96,0.98,1},
-    {0.95,0.98,1,1},//only three bins here
-    {1,1,1,1}//only one bin here
+	  {1,1,1,1},//only one bin here
+	  {0.84,0.94,1,1},//only three bins here
+	  {0.85,0.92,0.96,1},//Col. Forbins...
+	  {0.88,0.93,0.97,1},
+	  {0.90,0.94,0.97,1},
+	  {0.91,0.95,0.97,1},
+	  {0.92,0.96,0.98,1},
+	  {0.95,0.98,1,1},//only three bins here
+	  {1,1,1,1}//only one bin here
   };
 
 
@@ -65,7 +76,7 @@ void DrawTunedOverlays(){
   TH1F* SigMomMCOther = new TH1F("SigMomMCOther","",8,PBins);
 
   TH1F* SigMomData = new TH1F("SigMomData","",8,PBins);
-  
+
   TH1F* SigMomTemp = new TH1F("SigMomTemp","",8,PBins);
   TH1F* SigMomTempData = new TH1F("SigMomTempData","",8,PBins);
 
@@ -114,7 +125,7 @@ void DrawTunedOverlays(){
   defaultData->Draw("selmu_amom>>SigMomTempData",CutStr.c_str());
   SigMomTemp->Scale(PoTScale);
 
-  
+
   cout << "Integrals:" << endl;
   cout << SigMomTemp->Integral() << " " << SigMomTempData->Integral() << endl;
 
@@ -122,14 +133,14 @@ void DrawTunedOverlays(){
 
   //bin width
   for(int i=0; i<8; i++){
-    SigMomMC0->SetBinContent(i+1,(SigMomMC0->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomMC1->SetBinContent(i+1,(SigMomMC1->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomMC2->SetBinContent(i+1,(SigMomMC2->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomMC3->SetBinContent(i+1,(SigMomMC3->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomMC7->SetBinContent(i+1,(SigMomMC7->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomMCOther->SetBinContent(i+1,(SigMomMCOther->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomData->SetBinContent(i+1,(SigMomData->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
-    SigMomData->SetBinError(i+1,(SigMomData->GetBinError(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomMC0->SetBinContent(i+1,(SigMomMC0->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomMC1->SetBinContent(i+1,(SigMomMC1->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomMC2->SetBinContent(i+1,(SigMomMC2->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomMC3->SetBinContent(i+1,(SigMomMC3->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomMC7->SetBinContent(i+1,(SigMomMC7->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomMCOther->SetBinContent(i+1,(SigMomMCOther->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomData->SetBinContent(i+1,(SigMomData->GetBinContent(i+1))/(PBins[i+1]-PBins[i]));
+	  SigMomData->SetBinError(i+1,(SigMomData->GetBinError(i+1))/(PBins[i+1]-PBins[i]));
 
   }
 
@@ -185,11 +196,7 @@ void DrawTunedOverlays(){
 
   c->Print("./plots/TestOverlayMom.eps");
 
-  //cout << hs->Integral() << " " << SigMomData->Integral() << endl;
-
-
-
-  return;
+  return c;
 }
 
 
