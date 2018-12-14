@@ -1,9 +1,13 @@
 #include <TCanvas.h>
 #include <TPad.h>
-#include "./DrawTunedOverlays.C"
+#include "./ResultClass.C"
 
 void DrawFigure3(){
-	TCanvas* tempCan = DrawTunedOverlays(true, true);
+
+	stackResult* res1 = new stackResult(true, true);
+	stackResult* res2 = new stackResult(true, false);
+	stackResult* res3 = new stackResult(false, true);
+	stackResult* res4 = new stackResult(false, false);
 
 	TCanvas* can = new TCanvas("can", "can", 2800, 1500);
 
@@ -12,21 +16,25 @@ void DrawFigure3(){
     subPad->Draw();
 
 	subPad->cd(1);
-	tempCan->DrawClonePad();
+	res1->mc->Draw("hist");
+	res1->data->Draw("same P0");
+	res1->leg->Draw("same");
 	subPad->cd(2);
-	tempCan->DrawClonePad();
+	res2->mc->Draw("hist");
+	res2->data->Draw("same P0");
+	res2->leg->Draw("same");
 	subPad->cd(3);
-	tempCan->DrawClonePad();
+	res3->mc->Draw("hist");
+	res3->data->Draw("same P0");
+	res3->leg->Draw("same");
 	subPad->cd(4);
-	tempCan->DrawClonePad();
+	res4->mc->Draw("hist");
+	res4->data->Draw("same P0");
+	res4->leg->Draw("same");
 	subPad->cd(5);
-	tempCan->DrawClonePad();
 	subPad->cd(6);
-	tempCan->DrawClonePad();
 	subPad->cd(7);
-	tempCan->DrawClonePad();
 	subPad->cd(8);
-	tempCan->DrawClonePad();
 
 	can->Print("./plots/figure3.eps");
 }
