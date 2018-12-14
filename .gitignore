@@ -1,0 +1,8 @@
+*_C*
+*.d
+*.so
+*.root
+*.eps
+*.pdf
+*.png
+*.DS_Store
