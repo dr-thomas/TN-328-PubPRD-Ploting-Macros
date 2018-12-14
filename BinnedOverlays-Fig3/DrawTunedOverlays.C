@@ -6,6 +6,14 @@
 #include <TCanvas.h>
 #include <TLegend.h>
 
+/*
+ * TODO: ideas:
+ *
+ *   this is fucked, only idea to try would be to create a class with members that are the stack objects, legend, and data 
+ *   hist.  all of this would be in the constructor, call constructor for each configuration and then draw hists from 
+ *   this object.
+ */
+
 TCanvas* DrawTunedOverlays(bool isSignal, bool isWater){
 
   string CutStr1;
