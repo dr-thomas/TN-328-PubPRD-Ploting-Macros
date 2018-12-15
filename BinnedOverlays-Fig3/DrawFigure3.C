@@ -1,12 +1,12 @@
 #include <TCanvas.h>
 #include <TPad.h>
 #include "./ResultClass.C"
-#include "./ResultClassCos.C"
 
 void DrawFigure3(){
 
-	stackResult* res1 = new stackResult(true,true);
-	stackResultCos* res2 = new stackResultCos(true,true);
+	//stackResult(bool isSignal, bool isWater, bool isMomentum){
+	stackResult* res1 = new stackResult(true,true,true);
+	stackResult* res2 = new stackResult(true,true,false);
 	TCanvas* can = new TCanvas("can", "can", 2800, 1500);
 
     TPad* subPad = new TPad("pad", "pad", 0.1, 0.1, 1.0, 1.0);
